@@ -11,15 +11,14 @@
 #=======================
 
 
-#library(ape)
+library(ape)
 library(shinystan)
 library(rstan)
 library(loo)
 #rstan_options(auto_write = TRUE)
 #options(mc.cores = parallel::detectCores())
 
-# setwd("~/Dropbox/Rachel Stan")
-setwd("~/Dropbox/RachelsModel")
+setwd("~/Desktop/Bayesian_Hierarchical_model")
 
 
 eucal <- read.csv("EucsGH.csv", stringsAsFactors=FALSE)
@@ -31,12 +30,12 @@ o <- tempDat$sp!= "E. morrisbyi" & tempDat$dead!= "y"
 tempDat2 <- tempDat[o,]
 
 #######################################
-# tree29 <- read.tree("Euc.final.dated.tre")
-# tree29$tip.label <- paste("E.", tree29$tip.label, sep=" ")
-# tree <- drop.tip(tree29, c("E. morrisbyi","E. nitida","E. vernicosa" ,"E. johnstonii","E. perriniana","E. nitens" ))
-# phylocor <- vcv.phylo(tree,corr=TRUE)
-# corNames <- order(colnames(phylocor))
-# phyCor <- phylocor[corNames, corNames]
+tree29 <- read.tree("Euc.final.dated.tre")
+tree29$tip.label <- paste("E.", tree29$tip.label, sep=" ")
+tree <- drop.tip(tree29, c("E. morrisbyi","E. nitida","E. vernicosa" ,"E. johnstonii","E. perriniana","E. nitens" ))
+phylocor <- vcv.phylo(tree,corr=TRUE)
+corNames <- order(colnames(phylocor))
+phyCor <- phylocor[corNames, corNames]
 
 ##########################################
 #lower level biomass
@@ -83,16 +82,16 @@ biomData <- list(
 
 logBiom = log(Biom)
 
-fit <- stan(file.path(getwd(), "Try 3/HBM_CRPNextStep_Normal.stan"), data= biomData, iter=1000, chains=2, seed=5, control = list(adapt_delta = .9, max_treedepth = 13), cores = 3) 
+#fit <- stan(file="HBM_CRPNextStep.stan", data= biomData, iter=1000, chains=3, seed=5, control = list(adapt_delta = .9, max_treedepth = 13), cores = 3) 
 
-fit <- stan(file.path(getwd(), "Try 3/HBM_CRP_AddN_Normal.stan"), data= biomData, iter=1000, chains=6, seed=5, control = list(adapt_delta = .9, max_treedepth = 13), cores = 3) 
+fit <- stan(file="HBM_CRP_AddN_Normal.stan", data= biomData, iter=1000, chains=3, seed=5, control = list(adapt_delta = .9, max_treedepth = 13), cores = 3) 
 
-fit <- stan(fit = fit, data= biomData, iter=1000, chains=6, seed=5, control = list(adapt_delta = .9, max_treedepth = 13), cores = 3) 
+#fit <- stan(fit = fit, data= biomData, iter=1000, chains=6, seed=5, control = list(adapt_delta = .9, max_treedepth = 13), cores = 3) 
 
-fit <- stan(file.path(getwd(), "Try 3/HBM_CRP_AddN_SN.stan"), data= biomData, iter=10, chains=1, seed=5, control = list(adapt_delta = .9, max_treedepth = 13), cores = 1) 
+#fit <- stan(file.path(getwd(), "Try 3/HBM_CRP_AddN_SN.stan"), data= biomData, iter=10, chains=1, seed=5, control = list(adapt_delta = .9, max_treedepth = 13), cores = 1) 
 
 #initSkewParam = function(i) list(rawSkewParam = runif(length(unique(sppBiom)), -3, -.1), hierSkewParam = runif(1,-2.5, -1.5))
-fit <- stan(fit=fit, data= biomData, iter=500, chains=1, 
+#fit <- stan(fit=fit, data= biomData, iter=500, chains=1, 
   seed=4, control = list(adapt_delta = .99, max_treedepth = 13), cores = 1) 
 
 
