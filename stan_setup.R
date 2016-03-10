@@ -81,4 +81,4 @@ biomData <- list(
 logBiom = log(Biom)
 
 
-fit_phy_withPhos <- stan(file.path(getwd(), "HBM_CRP_AddN_Normal_phy_withPhos.stan"), data= biomData, iter=1000, chains=3, seed=5, control = list(adapt_delta = .9, max_treedepth = 13), cores = 3)  
+fit_phy_withPhos <- stan(file.path(getwd(), "HBM.stan"), data= biomData, iter=1000, chains=3, seed=5, control = list(adapt_delta = .9, max_treedepth = 13), cores = 3)  
